@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    name: Build, Test and Coverage
     runs-on: ubuntu-latest
 
     steps:
