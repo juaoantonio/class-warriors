@@ -26,5 +26,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle
 
+      - run: chmod +x gradlew
+
       - name: Verificar formatação com Spotless
         run: ./gradlew spotlessCheck
