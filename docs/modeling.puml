@@ -1,0 +1,138 @@
+@startuml
+' ---------------------------
+' Hexagonal Architecture - UML Diagram (Factory Pattern)
+' Layers: Domain, Application, Adapters
+' Class names and methods in English; comments in Portuguese
+' ---------------------------
+
+package "Domain" {
+  abstract class Entity {
+    - String name
+    - int hp
+    - int attackPower
+    - int defense
+    - int dexterity
+    - int speed
+    + getName(): String
+    + getHp(): int
+    + setHp(int): void
+    + performAttack(): AttackResult
+  }
+
+  abstract class Hero extends Entity
+  abstract class Monster extends Entity
+
+  ' Classes concretas de heróis
+  class Warrior extends Hero
+  class Mage extends Hero
+  class Archer extends Hero
+  class Rogue extends Hero
+
+  ' Classes concretas de monstros
+  class Goblin extends Monster
+  class Troll extends Monster
+  class Dragon extends Monster
+
+  ' Fábrica para criação de entidades
+  class EntityFactory {
+    + static createWarrior(): Hero
+    + static createMage(): Hero
+    + static createArcher(): Hero
+    + static createRogue(): Hero
+    + static createGoblin(): Monster
+    + static createTroll(): Monster
+    + static createDragon(): Monster
+  }
+
+  class Game {
+    - List<Hero> heroes
+    - List<Monster> monsters
+    - DifficultyLevel difficulty
+    - Turn currentTurn
+    - GameLog gameLog
+    + startGame(): void
+    + endGame(): void
+    + nextTurn(): void
+  }
+
+  class Turn {
+    - List<Entity> participants
+    + executeTurn(): void
+  }
+
+  class GameLog {
+    - List<String> entries
+    + addEntry(String): void
+    + getEntries(): List<String>
+  }
+
+  enum AttackResult {
+    MISS
+    HIT
+    CRITICAL
+  }
+
+  enum DifficultyLevel {
+    EASY
+    MEDIUM
+    HARD
+  }
+}
+
+package "Application" {
+  interface GameServicePort {
+    + start(): void
+    + play(): void
+    + getLogs(): List<String>
+  }
+
+  class GameService implements GameServicePort {
+    - Domain.Game game
+    + start(): void
+    + play(): void
+    + getLogs(): List<String>
+  }
+}
+
+package "Adapters" {
+  interface PersistencePort {
+    + saveLog(String): void
+    + loadLog(): List<String>
+  }
+
+  class InMemoryLogAdapter implements PersistencePort {
+    - GameLog log
+    + saveLog(String): void
+    + loadLog(): List<String>
+  }
+
+  class ConsoleOutputAdapter {
+    + display(String): void
+  }
+}
+
+' ---------------------------
+' Relationships between packages and classes
+' ---------------------------
+
+Entity <|-- Hero
+Entity <|-- Monster
+Hero <|-- Warrior
+Hero <|-- Mage
+Hero <|-- Archer
+Hero <|-- Rogue
+Monster <|-- Goblin
+Monster <|-- Troll
+Monster <|-- Dragon
+Game "1" o-- "*" Hero : heroes
+Game "1" o-- "*" Monster : monsters
+Game --> Turn
+Game --> GameLog
+Turn --> Entity : actions
+GameServicePort <|.. GameService
+GameService --> Game
+GameService --> PersistencePort
+InMemoryLogAdapter ..|> PersistencePort
+Game --- ConsoleOutputAdapter
+
+@enduml
