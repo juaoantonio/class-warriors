@@ -1,4 +1,6 @@
 # 🎮 BattleText RPG
+![Build](https://github.com/juaoantonio/class-warriors/actions/workflows/linting.yml/badge.svg)
+![Build](https://github.com/juaoantonio/class-warriors/actions/workflows/testing-and-coverage.yml/badge.svg)
 
 Este é um jogo de RPG baseado em texto, desenvolvido como trabalho acadêmico para a disciplina de Programação Orientada a Objetos (POO). O jogo é em turnos e simula batalhas automáticas entre heróis e monstros.
 
