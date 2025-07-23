@@ -139,7 +139,7 @@ Disciplina: **Programação Orientada a Objetos** – Prof. Reginaldo Santos
 
 ```
 👑 Tech Lead ........... João Antônio Barbosa  
-💻 Colaboradores ....... José Calixto · Joel Henrique · Luiz Nery
+💻 Colaboradores ....... José Calixto · Joel Henrique · Luiz Nery · Arthur Mendes
 ```
 
 *Have fun coding, fighting and learning!*
