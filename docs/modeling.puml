@@ -1,6 +1,7 @@
 @startuml
 skinparam style strictuml
 
+' ================= DOMAIN =================
 package "domain.character" {
     abstract class Entity {
         -name : String
@@ -9,8 +10,8 @@ package "domain.character" {
         -defense : int
         -dexterity : int
         -speed : int
-        +performAttack(Entity) : int
-        +receiveDamage(int)
+        +performAttack(target : Entity) : int
+        +receiveDamage(rawDamage : int)
         +isAlive() : boolean
     }
 
@@ -28,42 +29,130 @@ package "domain.character" {
     Monster <|-- Dragon
 }
 
-enum AttackResult {
-MISSED; HIT; CRITICAL_HIT
+package domain {
+    enum AttackResult {
+        MISSED
+        HIT
+        CRITICAL_HIT
+    }
+}
+
+package domain.logs {
+    class BattleLog {
+        -entries : List<BattleLogEntry>
+        +BattleLog(entries : List<BattleLogEntry>)
+        +addEntry(entry : BattleLogEntry)
+        +getEntries() : List<BattleLogEntry>
+        +print()
+    }
+
+    class BattleLogEntry {
+        -attackerName     : String
+        -targetName       : String
+        -roundNumber      : int
+        -turnOrderIndex   : int
+        -rawDamage        : int
+        -effectiveDamage  : int
+        -targetHpBefore   : int
+        -targetHpAfter    : int
+        -result           : AttackResult
+        -killingBlow      : boolean
+        -timestamp        : Instant
+        +of(...) : BattleLogEntry
+        +toHumanReadable() : String
+        +toCsvRow() : String
+        +csvHeader() : String
+    }
 }
 
 package domain.battle {
-    class TurnEngine
+    class TurnEngine {
+        +playRound(heroes : List<Entity>, monsters : List<Entity>) : List<BattleLogEntry>
+    }
 }
 
 package domain.game {
-    class GameState
-    enum Difficulty
+    enum Difficulty {
+        EASY
+        MEDIUM
+        HARD
+        --
+        -statMultiplier  : double
+        -monstersPerHero : int
+        +applyScaling(monster : Monster) : Monster
+        +monstersPerHero() : int
+        +pickableTypes() : MonsterType[]
+    }
+
+    class GameState {
+        -heroes       : List<Hero>
+        -monsters     : List<Monster>
+        -difficulty   : Difficulty
+        -roundNumber  : int
+        +getHeroes() : List<Hero>
+        +getMonsters() : List<Monster>
+        +getDifficulty() : Difficulty
+        +getRoundNumber() : int
+        +battleOngoing() : boolean
+        +nextRound(updatedHeroes : List<Hero>, updatedMonsters : List<Monster>) : GameState
+    }
 }
 
-package application.port.input {
-    interface GameInputPort
+' =============== APPLICATION ==============
+package application.ports.input {
+    interface GameInputPort {
+        +startGame(heroCount : int, difficulty : Difficulty)
+        +playRound()
+        +endGame()
+        +getGameState() : GameState
+        +getBattleLogs() : List<BattleLogEntry>
+        +getLastRoundLogs() : List<BattleLogEntry>
+    }
 }
 
-package application.port.output {
-    interface GameOutputPort
-    interface PersistencePort
+package application.ports.output {
+    interface LogPersistancePort {
+        +saveBattleEntries(log : List<BattleLogEntry>)
+        +saveBattleEntry(log : BattleLogEntry)
+        +getAllBattleLogs() : List<BattleLogEntry>
+    }
 }
 
 package application.service {
-    class GameService
+    class GameService {
+        -logPersistance : LogPersistancePort
+        -turnEngine     : TurnEngine
+        -state          : GameState
+        -lastRoundLogs  : List<BattleLogEntry>
+        +startGame(heroCount : int, difficulty : Difficulty)
+        +playRound()
+        +endGame()
+        +getGameState() : GameState
+        +getBattleLogs() : List<BattleLogEntry>
+        +getLastRoundLogs() : List<BattleLogEntry>
+    }
     GameInputPort <|.. GameService
-    GameService ..> GameOutputPort
-    GameService ..> PersistencePort
+    GameService ..> LogPersistancePort
 }
 
+' ================ ADAPTERS ================
 package adapter.cli {
-    class CliGameAdapter
-    CliGameAdapter ..|> GameOutputPort
+    class CliGameAdapter {
+        -gameService : GameService
+        +run()
+        +printState()
+        +printLogs(logs : List<BattleLogEntry>)
+    }
+    CliGameAdapter ..> GameInputPort
 }
 
 package adapter.persistence {
-    class InMemoryLogAdapter
-    InMemoryLogAdapter ..|> PersistencePort
+    class InMemoryLogAdapter {
+        -store : List<BattleLogEntry>
+        +saveBattleEntries(log : List<BattleLogEntry>)
+        +saveBattleEntry(log : BattleLogEntry)
+        +getAllBattleLogs() : List<BattleLogEntry>
+    }
+    InMemoryLogAdapter ..|> LogPersistancePort
 }
 @enduml
