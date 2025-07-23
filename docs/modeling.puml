@@ -1,0 +1,69 @@
+@startuml
+skinparam style strictuml
+
+package "domain.character" {
+    abstract class Entity {
+        -name : String
+        -hitPoints : int
+        -attackPower : int
+        -defense : int
+        -dexterity : int
+        -speed : int
+        +performAttack(Entity) : int
+        +receiveDamage(int)
+        +isAlive() : boolean
+    }
+
+    class Hero
+    class Monster
+    Entity <|-- Hero
+    Entity <|-- Monster
+
+    Hero <|-- Warrior
+    Hero <|-- Mage
+    Hero <|-- Archer
+    Hero <|-- Rogue
+    Monster <|-- Goblin
+    Monster <|-- Orc
+    Monster <|-- Dragon
+}
+
+enum AttackResult {
+MISSED; HIT; CRITICAL_HIT
+}
+
+package domain.battle {
+    class Turn
+}
+
+package domain.game {
+    class GameState
+    enum Difficulty
+}
+
+package application.port.input {
+    interface GameInputPort
+}
+
+package application.port.output {
+    interface GameOutputPort
+    interface PersistencePort
+}
+
+package application.service {
+    class GameService
+    GameInputPort <|.. GameService
+    GameService ..> GameOutputPort
+    GameService ..> PersistencePort
+}
+
+package adapter.cli {
+    class CliGameAdapter
+    CliGameAdapter ..|> GameOutputPort
+}
+
+package adapter.persistence {
+    class InMemoryLogAdapter
+    InMemoryLogAdapter ..|> PersistencePort
+}
+@enduml

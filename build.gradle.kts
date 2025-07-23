@@ -2,6 +2,7 @@ plugins {
     java
     jacoco
     id("com.diffplug.spotless") version "6.25.0"
+    id("io.freefair.lombok") version "8.14"
 }
 
 group = "br.dev.joaobarbosa"
