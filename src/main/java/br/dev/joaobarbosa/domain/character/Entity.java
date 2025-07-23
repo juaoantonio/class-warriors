@@ -1,4 +1,4 @@
-package br.ufpa.turnbasedgame.domain.character;
+package br.dev.joaobarbosa.domain.character;
 
 // Dependo do colega para ajustar
 // import br.ufpa.turnbasedgame.domain.battle.AttackResult;

@@ -1,4 +1,4 @@
-package br.ufpa.turnbasedgame.domain.character;
+package br.dev.joaobarbosa.domain.character;
 
 import static org.junit.jupiter.api.Assertions.*;
 
