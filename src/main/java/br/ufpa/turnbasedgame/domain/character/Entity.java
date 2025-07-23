@@ -52,10 +52,10 @@ public abstract class Entity {
 
     // --- Métodos de Lógica de Batalha ---
 
-    // Método abstrato de ataque. Cada classe tem o próprio e retorna um dano bruto.
+    // Metodo abstrato de ataque. Cada classe tem o próprio e retorna um dano bruto.
     public abstract int performAttack(Entity target);
 
-    // Método para calcular o dano que a entidade recebe. Não pode ser menor que 0.
+    // Metodo para calcular o dano que a entidade recebe. Não pode ser menor que 0.
     public void receiveDamage(int rawDamage) {
         // Calcula o dano causado, garantindo que não seja negativo.
         // Se a defesa for maior que o dano bruto, o dano causado é 0.
