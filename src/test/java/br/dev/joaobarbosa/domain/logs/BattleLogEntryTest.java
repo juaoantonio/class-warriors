@@ -1,9 +1,8 @@
-package br.dev.joaobarbosa.logs;
+package br.dev.joaobarbosa.domain.logs;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import br.dev.joaobarbosa.domain.AttackResult;
-import br.dev.joaobarbosa.domain.logs.BattleLogEntry;
 import java.time.Instant;
 import org.junit.jupiter.api.Test;
 
