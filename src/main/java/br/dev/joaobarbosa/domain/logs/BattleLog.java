@@ -1,4 +1,4 @@
-package br.dev.joaobarbosa.logs;
+package br.dev.joaobarbosa.domain.logs;
 
 import java.util.List;
 

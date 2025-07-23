@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import br.dev.joaobarbosa.domain.AttackResult;
 import java.time.Instant;
+
+import br.dev.joaobarbosa.domain.logs.BattleLogEntry;
 import org.junit.jupiter.api.Test;
 
 class BattleLogEntryTest {

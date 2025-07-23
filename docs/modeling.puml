@@ -33,7 +33,7 @@ MISSED; HIT; CRITICAL_HIT
 }
 
 package domain.battle {
-    class Turn
+    class TurnEngine
 }
 
 package domain.game {

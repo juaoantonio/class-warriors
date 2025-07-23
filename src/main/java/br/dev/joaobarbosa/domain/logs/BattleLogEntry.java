@@ -1,4 +1,4 @@
-package br.dev.joaobarbosa.logs;
+package br.dev.joaobarbosa.domain.logs;
 
 import br.dev.joaobarbosa.domain.AttackResult;
 import java.time.Instant;
