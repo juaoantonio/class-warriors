@@ -70,12 +70,6 @@ public final class BattleLogEntry {
     this.timestamp = Objects.requireNonNull(timestamp, "timestamp");
   }
 
-  /**
-   * Cria um log a partir de Entities e valores já calculados pelo motor.
-   *
-   * <p>Importante: o motor deve capturar HP do alvo <b>antes</b> de aplicar dano e informar o HP
-   * final (já atualizado) para registrar corretamente.
-   */
   public static BattleLogEntry of(
       String attacker,
       String target,
@@ -157,7 +151,6 @@ public final class BattleLogEntry {
         kill);
   }
 
-  /** Linha CSV pronta para persistência. */
   public String toCsvRow() {
     return String.join(
         ",",
@@ -174,14 +167,10 @@ public final class BattleLogEntry {
         String.valueOf(killingBlow));
   }
 
-  // Cabeçalho CSV (para adapters de arquivo).
   public static String csvHeader() {
     return "timestamp,attacker,target,round,turn,result,rawDamage,effectiveDamage,targetHpBefore,targetHpAfter,killingBlow";
   }
 
-  // ---------------------------------------------------------------------
-  // Interno: escaping simples de vírgulas e aspas.
-  // ---------------------------------------------------------------------
   private static String escape(String v) {
     if (v == null) return "";
     if (v.contains(",") || v.contains("\"")) {
