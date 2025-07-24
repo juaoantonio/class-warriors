@@ -19,19 +19,17 @@ public interface LogPersistancePort {
    */
   void append(BattleLog logs);
 
-
-    /**
-     * Adiciona uma única entrada ao BattleLog existente.
-     *
-     * @param log A entrada a ser adicionada.
-     */
+  /**
+   * Adiciona uma única entrada ao BattleLog existente.
+   *
+   * @param log A entrada a ser adicionada.
+   */
   void appendOne(BattleLogEntry log);
 
-
-    /**
-     * Carrega o BattleLog completo do armazenamento.
-     *
-     * @return O BattleLog carregado.
-     */
+  /**
+   * Carrega o BattleLog completo do armazenamento.
+   *
+   * @return O BattleLog carregado.
+   */
   BattleLog load();
 }
