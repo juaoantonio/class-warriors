@@ -11,7 +11,7 @@ class EntityTest {
 
   // Uma implementação concreta de Entity para ser usada nos testes.
   private static class ConcreteEntity extends Entity {
-    public ConcreteEntity(
+    private ConcreteEntity(
         String name, int hitPoints, int attackPower, int defense, int dexterity, int speed) {
       super(name, hitPoints, attackPower, defense, dexterity, speed);
     }

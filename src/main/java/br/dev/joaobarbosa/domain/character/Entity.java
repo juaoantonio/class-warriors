@@ -1,8 +1,15 @@
 package br.dev.joaobarbosa.domain.character;
 
+import br.dev.joaobarbosa.domain.game.Difficulty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
+@Setter // Adiciona setters para TODOS os campos.
+@AllArgsConstructor
+@ToString(of = {"name", "hitPoints", "attackPower", "defense"})
 public abstract class Entity {
   protected String name;
   protected int hitPoints; // Pontos de Vida (HP)
@@ -10,17 +17,6 @@ public abstract class Entity {
   protected int defense; // Resistência a Danos (Defesa)
   protected int dexterity; // Destreza (Chance de Acerto)
   protected int speed; // Velocidade
-
-  // Construtor de entidades
-  public Entity(
-      String name, int hitPoints, int attackPower, int defense, int dexterity, int speed) {
-    this.name = name;
-    this.hitPoints = hitPoints;
-    this.attackPower = attackPower;
-    this.defense = defense;
-    this.dexterity = dexterity;
-    this.speed = speed;
-  }
 
   // --- Métodos de Lógica de Batalha ---
   public abstract int performAttack(Entity target);
@@ -34,9 +30,13 @@ public abstract class Entity {
     return this.hitPoints > 0;
   }
 
-  @Override
-  public String toString() {
-    return String.format(
-        "%s (HP: %d, ATK: %d, DEF: %d)", this.name, this.hitPoints, this.attackPower, this.defense);
+  public void applyDifficulty(Difficulty difficulty) {
+    if (difficulty == null) return;
+
+    double multiplier = difficulty.getMonsterMultiplier();
+
+    this.setHitPoints((int) (this.getHitPoints() * multiplier));
+    this.setAttackPower((int) (this.getAttackPower() * multiplier));
+    this.setDefense((int) (this.getDefense() * multiplier));
   }
 }
