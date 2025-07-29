@@ -6,7 +6,6 @@ import br.dev.joaobarbosa.domain.logs.BattleLogEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class InMemoryLogAdapter implements LogPersistancePort {
 
   private final List<BattleLogEntry> storedEntries = new ArrayList<>();
@@ -30,19 +29,13 @@ public class InMemoryLogAdapter implements LogPersistancePort {
   }
 
   @Override
-  public void save(BattleLog logs) {
-
-  }
+  public void save(BattleLog logs) {}
 
   @Override
-  public void append(BattleLog logs) {
-
-  }
+  public void append(BattleLog logs) {}
 
   @Override
-  public void appendOne(BattleLogEntry log) {
-
-  }
+  public void appendOne(BattleLogEntry log) {}
 
   @Override
   public BattleLog load() {

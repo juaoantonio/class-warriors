@@ -158,19 +158,13 @@ public class FileLogAdapter implements LogPersistancePort {
   }
 
   @Override
-  public void save(BattleLog logs) {
-
-  }
+  public void save(BattleLog logs) {}
 
   @Override
-  public void append(BattleLog logs) {
-
-  }
+  public void append(BattleLog logs) {}
 
   @Override
-  public void appendOne(BattleLogEntry log) {
-
-  }
+  public void appendOne(BattleLogEntry log) {}
 
   @Override
   public BattleLog load() {
