@@ -1,15 +1,14 @@
 package br.dev.joaobarbosa.adapters;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import br.dev.joaobarbosa.domain.AttackResult;
 import br.dev.joaobarbosa.domain.logs.BattleLogEntry;
-import org.junit.jupiter.api.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.time.Instant;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.*;
 
 class FileLogAdapterTest {
 
@@ -25,11 +24,8 @@ class FileLogAdapterTest {
 
   @Test
   void testSaveAndLoadSingleEntry() {
-    BattleLogEntry entry = BattleLogEntry.of(
-            "Hero", "Monster", 1, 0, 10, 8, 100, 92,
-            AttackResult.HIT,
-            Instant.now()
-    );
+    BattleLogEntry entry =
+        BattleLogEntry.of("Hero", "Monster", 1, 0, 10, 8, 100, 92, AttackResult.HIT, Instant.now());
 
     adapter.saveBattleEntry(entry);
 

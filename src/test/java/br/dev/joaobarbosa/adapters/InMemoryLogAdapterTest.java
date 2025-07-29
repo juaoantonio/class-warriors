@@ -22,7 +22,7 @@ class InMemoryLogAdapterTest {
   void testSaveAndLoadSingleEntry() {
     Instant timestamp = Instant.parse("2025-07-23T15:00:00Z");
     BattleLogEntry entry =
-            BattleLogEntry.of("Hero", "Monster", 1, 1, 20, 15, 50, 35, AttackResult.HIT, timestamp);
+        BattleLogEntry.of("Hero", "Monster", 1, 1, 20, 15, 50, 35, AttackResult.HIT, timestamp);
 
     adapter.saveBattleEntry(entry);
 

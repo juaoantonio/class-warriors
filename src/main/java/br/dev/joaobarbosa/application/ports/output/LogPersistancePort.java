@@ -3,9 +3,17 @@ package br.dev.joaobarbosa.application.ports.output;
 import br.dev.joaobarbosa.domain.logs.BattleLog;
 import br.dev.joaobarbosa.domain.logs.BattleLogEntry;
 
+import java.util.List;
+
 public interface LogPersistancePort {
 
-  /**
+    void saveBattleEntries(List<BattleLogEntry> logEntries);
+
+    void saveBattleEntry(BattleLogEntry entry);
+
+    List<BattleLogEntry> getAllBattleLogs();
+
+    /**
    * Salva o BattleLog completo, substituindo o conteúdo existente.
    *
    * @param logs O BattleLog a ser salvo.

@@ -1,12 +1,12 @@
 package br.dev.joaobarbosa.adapters;
 
 import br.dev.joaobarbosa.application.ports.output.LogPersistancePort;
+import br.dev.joaobarbosa.domain.logs.BattleLog;
 import br.dev.joaobarbosa.domain.logs.BattleLogEntry;
-
 import java.util.ArrayList;
 import java.util.List;
 
-/** Adaptador que mantém o BattleLog apenas na memória. */
+
 public class InMemoryLogAdapter implements LogPersistancePort {
 
   private final List<BattleLogEntry> storedEntries = new ArrayList<>();
@@ -27,5 +27,25 @@ public class InMemoryLogAdapter implements LogPersistancePort {
   @Override
   public List<BattleLogEntry> getAllBattleLogs() {
     return new ArrayList<>(storedEntries); // retorna cópia para evitar modificação externa
+  }
+
+  @Override
+  public void save(BattleLog logs) {
+
+  }
+
+  @Override
+  public void append(BattleLog logs) {
+
+  }
+
+  @Override
+  public void appendOne(BattleLogEntry log) {
+
+  }
+
+  @Override
+  public BattleLog load() {
+    return null;
   }
 }
