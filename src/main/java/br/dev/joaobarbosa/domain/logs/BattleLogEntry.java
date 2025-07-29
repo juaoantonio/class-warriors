@@ -183,4 +183,8 @@ public final class BattleLogEntry {
   public String toString() {
     return toHumanReadable();
   }
+
+  public int toCsv() {
+    return 0;
+  }
 }

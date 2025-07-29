@@ -2,17 +2,16 @@ package br.dev.joaobarbosa.adapters;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import br.dev.joaobarbosa.application.ports.output.LogPersistancePort;
 import br.dev.joaobarbosa.domain.AttackResult;
-import br.dev.joaobarbosa.domain.logs.BattleLog;
 import br.dev.joaobarbosa.domain.logs.BattleLogEntry;
-import java.io.IOException;
 import java.time.Instant;
-import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.*;
 
 class InMemoryLogAdapterTest {
 
-  private InMemoryLogAdapter adapter;
+  private LogPersistancePort adapter;
 
   @BeforeEach
   void setup() {
@@ -20,20 +19,19 @@ class InMemoryLogAdapterTest {
   }
 
   @Test
-  void testSaveAndLoad() throws IOException {
+  void testSaveAndLoadSingleEntry() {
     Instant timestamp = Instant.parse("2025-07-23T15:00:00Z");
     BattleLogEntry entry =
-        BattleLogEntry.of("Hero", "Monster", 1, 1, 20, 15, 50, 35, AttackResult.HIT, timestamp);
+            BattleLogEntry.of("Hero", "Monster", 1, 1, 20, 15, 50, 35, AttackResult.HIT, timestamp);
 
-    BattleLog log = new BattleLog(Collections.singletonList(entry));
-    adapter.save(log);
+    adapter.saveBattleEntry(entry);
 
-    BattleLog loaded = adapter.load();
+    List<BattleLogEntry> loadedEntries = adapter.getAllBattleLogs();
 
-    assertNotNull(loaded);
-    assertEquals(1, loaded.getEntries().size());
+    assertNotNull(loadedEntries);
+    assertEquals(1, loadedEntries.size());
 
-    BattleLogEntry loadedEntry = loaded.getEntries().get(0);
+    BattleLogEntry loadedEntry = loadedEntries.get(0);
 
     assertEquals(entry.getAttackerName(), loadedEntry.getAttackerName());
     assertEquals(entry.getTargetName(), loadedEntry.getTargetName());
@@ -49,14 +47,14 @@ class InMemoryLogAdapterTest {
   }
 
   @Test
-  void testLoadBeforeSaveReturnsEmptyLog() throws IOException {
-    BattleLog loaded = adapter.load();
-    assertNotNull(loaded);
-    assertTrue(loaded.getEntries().isEmpty());
+  void testLoadBeforeSaveReturnsEmptyList() {
+    List<BattleLogEntry> loadedEntries = adapter.getAllBattleLogs();
+    assertNotNull(loadedEntries);
+    assertTrue(loadedEntries.isEmpty());
   }
 
   @Test
   void testSaveNullThrowsException() {
-    assertThrows(IllegalArgumentException.class, () -> adapter.save(null));
+    assertThrows(IllegalArgumentException.class, () -> adapter.saveBattleEntry(null));
   }
 }
