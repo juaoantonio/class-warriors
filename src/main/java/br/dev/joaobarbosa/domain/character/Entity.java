@@ -1,5 +1,8 @@
+// src/main/java/br/dev/joaobarbosa/domain/character/Entity.java
 package br.dev.joaobarbosa.domain.character;
 
+import br.dev.joaobarbosa.domain.battle.Attack;
+import br.dev.joaobarbosa.domain.battle.DefenseResult;
 import br.dev.joaobarbosa.domain.game.Difficulty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,23 +10,34 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter
-@Setter // Adiciona setters para TODOS os campos.
 @AllArgsConstructor
 @ToString(of = {"name", "hitPoints", "attackPower", "defense"})
 public abstract class Entity {
-  protected String name;
-  protected int hitPoints; // Pontos de Vida (HP)
-  protected int attackPower; // Força de Ataque
-  protected int defense; // Resistência a Danos (Defesa)
-  protected int dexterity; // Destreza (Chance de Acerto)
-  protected int speed; // Velocidade
+
+  @Setter protected String name;
+  protected double hitPoints;
+  @Setter protected int attackPower;
+  @Setter protected int defense;
+  @Setter protected int dexterity;
+  @Setter protected int speed;
+
+  /**
+   * Setter customizado para garantir que o HP nunca seja menor que zero.
+   *
+   * @param hitPoints O novo valor para o HP.
+   */
+  public void setHitPoints(double hitPoints) {
+    this.hitPoints = Math.max(0, hitPoints);
+  }
 
   // --- Métodos de Lógica de Batalha ---
-  public abstract int performAttack(Entity target);
 
-  public void receiveDamage(int rawDamage) {
-    int effectiveDamage = Math.max(0, rawDamage - this.defense);
-    this.hitPoints = Math.max(0, this.hitPoints - effectiveDamage);
+  public abstract Attack performAttack(Entity target);
+
+  public DefenseResult receiveDamage(Attack attack) {
+    double effectiveDefense = this.defense * (1.0 - attack.getDefensePenetration());
+    double effectiveDamage = Math.max(0, attack.getBaseDamage() - effectiveDefense);
+    return new DefenseResult(effectiveDamage);
   }
 
   public boolean isAlive() {
@@ -32,10 +46,8 @@ public abstract class Entity {
 
   public void applyDifficulty(Difficulty difficulty) {
     if (difficulty == null) return;
-
     double multiplier = difficulty.getMonsterMultiplier();
-
-    this.setHitPoints((int) (this.getHitPoints() * multiplier));
+    this.setHitPoints(this.getHitPoints() * multiplier);
     this.setAttackPower((int) (this.getAttackPower() * multiplier));
     this.setDefense((int) (this.getDefense() * multiplier));
   }
