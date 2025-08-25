@@ -1,4 +1,4 @@
-package br.dev.joaobarbosa.domain.character;
+package br.dev.joaobarbosa.domain.character.hero;
 
 import java.util.List;
 import java.util.Random;
