@@ -1,6 +1,7 @@
 plugins {
     java
     jacoco
+    application
     id("com.diffplug.spotless") version "6.25.0"
     id("io.freefair.lombok") version "8.14"
 }
@@ -10,6 +11,14 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+}
+
+application {
+    mainClass.set("br.dev.joaobarbosa.Main")
+}
+
+tasks.named<JavaExec>("run") {
+    standardInput = System.`in`
 }
 
 dependencies {
