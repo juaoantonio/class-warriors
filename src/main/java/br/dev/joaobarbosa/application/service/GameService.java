@@ -92,7 +92,7 @@ public class GameService implements GameInputPort {
 
   @Override
   public List<BattleLogEntry> getBattleLogs() {
-    return logPersistancePort.load().getEntries();
+    return logPersistancePort.load().entries();
   }
 
   @Override

@@ -1,4 +1,3 @@
-// src/main/java/br/dev/joaobarbosa/domain/logs/BattleLogEntry.java
 package br.dev.joaobarbosa.domain.logs;
 
 import br.dev.joaobarbosa.domain.AttackResult;
@@ -136,13 +135,12 @@ public final class BattleLogEntry {
         String.valueOf(roundNumber),
         String.valueOf(turnOrderIndex),
         result.name(),
-        String.format(Locale.ROOT, "%.2f", rawDamage), // Formata para double
-        String.format(Locale.ROOT, "%.2f", effectiveDamage), // Formata para double
-        String.format(Locale.ROOT, "%.2f", targetHpBefore), // Formata para double
-        String.format(Locale.ROOT, "%.2f", targetHpAfter), // Formata para double
+        String.format(Locale.ROOT, "%.2f", rawDamage),
+        String.format(Locale.ROOT, "%.2f", effectiveDamage),
+        String.format(Locale.ROOT, "%.2f", targetHpBefore),
+        String.format(Locale.ROOT, "%.2f", targetHpAfter),
         String.valueOf(killingBlow),
-        escape(specialAction) // Adiciona o novo campo
-        );
+        escape(specialAction));
   }
 
   @Override

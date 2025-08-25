@@ -1,4 +1,3 @@
-// src/main/java/br/dev/joaobarbosa/domain/battle/TurnEngine.java
 package br.dev.joaobarbosa.domain.battle;
 
 import br.dev.joaobarbosa.domain.AttackResult;
@@ -15,7 +14,7 @@ import java.util.stream.Stream;
 
 public class TurnEngine {
   private static final Random RANDOM = new Random();
-  private static final double CRITICAL_HIT_CHANCE = 0.1; // 10%
+  private static final double CRITICAL_HIT_CHANCE = 0.1;
 
   public List<Entity> getTurnOrder(List<Hero> heroes, List<Monster> monsters) {
     return Stream.concat(heroes.stream(), monsters.stream())
@@ -46,26 +45,24 @@ public class TurnEngine {
       if (result != AttackResult.MISSED) {
         if (result == AttackResult.CRITICAL_HIT) {
           attack.setBaseDamage(attack.getBaseDamage() * 2);
-          rawDamage *= 2; // Atualiza o dano bruto para o log
+          rawDamage *= 2;
         }
-        // O alvo processa o dano e nos diz o que aconteceu
+
         defenseResult = target.receiveDamage(attack);
-        // Aplicamos o dano final
+
         target.setHitPoints(Math.max(0, hpBefore - defenseResult.getEffectiveDamage()));
 
       } else {
-        // Se o ataque errou, não há dano nem ação de defesa
+
         defenseResult = new DefenseResult(0);
       }
 
       double hpAfter = target.getHitPoints();
 
-      // Ajuste para log de esquiva: se houve HIT mas o dano foi 0 devido a uma habilidade
       if (result == AttackResult.HIT
           && defenseResult.getEffectiveDamage() == 0
           && !defenseResult.getSpecialAction().isEmpty()) {
-        result =
-            AttackResult.MISSED; // Simplifica o log para "errou" quando o dano é totalmente evitado
+        result = AttackResult.MISSED;
       }
 
       turnLogs.add(

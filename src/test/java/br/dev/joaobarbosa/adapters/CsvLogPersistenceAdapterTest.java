@@ -66,8 +66,8 @@ class CsvLogPersistenceAdapterTest {
     CsvLogPersistenceAdapter reloadedAdapter = new CsvLogPersistenceAdapter(TEMP_FILE);
     BattleLog loaded = reloadedAdapter.load();
 
-    assertEquals(1, loaded.getEntries().size());
-    BattleLogEntry loadedEntry = loaded.getEntries().getFirst();
+    assertEquals(1, loaded.entries().size());
+    BattleLogEntry loadedEntry = loaded.entries().getFirst();
     assertEquals("A", loadedEntry.getAttackerName());
     assertEquals(10.0, loadedEntry.getRawDamage());
     assertEquals("SAMPLE_ACTION", loadedEntry.getSpecialAction());
@@ -82,8 +82,8 @@ class CsvLogPersistenceAdapterTest {
     adapter.appendOne(entry2);
 
     BattleLog log = adapter.load();
-    assertEquals(2, log.getEntries().size());
-    assertEquals("D", log.getEntries().get(1).getTargetName());
+    assertEquals(2, log.entries().size());
+    assertEquals("D", log.entries().get(1).getTargetName());
   }
 
   @Test
@@ -96,7 +96,7 @@ class CsvLogPersistenceAdapterTest {
     adapter.save(newLog);
 
     BattleLog loaded = adapter.load();
-    assertEquals(1, loaded.getEntries().size());
-    assertEquals("New", loaded.getEntries().getFirst().getAttackerName());
+    assertEquals(1, loaded.entries().size());
+    assertEquals("New", loaded.entries().getFirst().getAttackerName());
   }
 }

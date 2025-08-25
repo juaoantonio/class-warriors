@@ -13,12 +13,12 @@ public class InMemoryLogPersistenceAdapter implements LogPersistancePort {
   @Override
   public void save(BattleLog logs) {
     inMemoryEntries.clear();
-    inMemoryEntries.addAll(logs.getEntries());
+    inMemoryEntries.addAll(logs.entries());
   }
 
   @Override
   public void append(BattleLog logs) {
-    inMemoryEntries.addAll(logs.getEntries());
+    inMemoryEntries.addAll(logs.entries());
   }
 
   @Override

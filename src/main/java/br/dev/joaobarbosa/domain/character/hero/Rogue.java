@@ -19,7 +19,7 @@ public class Rogue extends Hero {
   public DefenseResult receiveDamage(Attack attack) {
     double dodgeChance = this.dexterity / 75.0;
     if (Math.random() < dodgeChance) {
-      return new DefenseResult(0, "ESQUIVOU"); // Retorna 0 de dano e a ação especial
+      return new DefenseResult(0, "ESQUIVOU");
     }
     return super.receiveDamage(attack);
   }

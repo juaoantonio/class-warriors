@@ -18,7 +18,7 @@ public class Goblin extends Monster {
   public DefenseResult receiveDamage(Attack attack) {
     double dodgeChance = 0.15;
     if (Math.random() < dodgeChance) {
-      return new DefenseResult(0, "ESQUIVOU"); // Retorna 0 de dano e a ação especial
+      return new DefenseResult(0, "ESQUIVOU");
     }
     return super.receiveDamage(attack);
   }

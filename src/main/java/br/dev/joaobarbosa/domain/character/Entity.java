@@ -1,4 +1,3 @@
-// src/main/java/br/dev/joaobarbosa/domain/character/Entity.java
 package br.dev.joaobarbosa.domain.character;
 
 import br.dev.joaobarbosa.domain.battle.Attack;

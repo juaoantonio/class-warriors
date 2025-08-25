@@ -30,7 +30,6 @@ public class CsvLogPersistenceAdapter implements LogPersistancePort {
     }
   }
 
-  // O método save() não precisa de alterações, pois ele já usa o toCsvRow() atualizado.
   @Override
   public void save(BattleLog logs) {
     try (BufferedWriter writer =
@@ -38,12 +37,12 @@ public class CsvLogPersistenceAdapter implements LogPersistancePort {
             file, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
       writer.write(BattleLogEntry.csvHeader());
       writer.newLine();
-      for (BattleLogEntry entry : logs.getEntries()) {
+      for (BattleLogEntry entry : logs.entries()) {
         writer.write(entry.toCsvRow());
         writer.newLine();
       }
       inMemoryEntries.clear();
-      inMemoryEntries.addAll(logs.getEntries());
+      inMemoryEntries.addAll(logs.entries());
     } catch (IOException e) {
       throw new UncheckedIOException("Erro ao salvar no CSV", e);
     }
@@ -51,7 +50,7 @@ public class CsvLogPersistenceAdapter implements LogPersistancePort {
 
   @Override
   public void append(BattleLog logs) {
-    inMemoryEntries.addAll(logs.getEntries());
+    inMemoryEntries.addAll(logs.entries());
   }
 
   @Override
@@ -81,23 +80,17 @@ public class CsvLogPersistenceAdapter implements LogPersistancePort {
   private BattleLogEntry toBattleLogEntry(String line) {
     String[] parts = line.split(",", -1);
 
-    // Assume-se que um método .of() em BattleLogEntry aceite todos os parâmetros do CSV.
-    // Se não existir, ele precisará ser criado.
-    // Ex: BattleLogEntry.of(attacker, target, ..., specialAction, instant)
-
-    // Por simplicidade, vamos chamar o .of() que já criamos e deixar que ele calcule o killingBlow
     return BattleLogEntry.of(
-        unescape(parts[1]), // attacker
-        unescape(parts[2]), // target
-        Integer.parseInt(parts[3]), // roundNumber
-        Integer.parseInt(parts[4]), // turnOrderIndex
-        Double.parseDouble(parts[6]), // rawDamage (CORRIGIDO para double)
-        Double.parseDouble(parts[7]), // effectiveDamage (CORRIGIDO para double)
-        Double.parseDouble(parts[8]), // targetHpBefore (CORRIGIDO para double)
-        Double.parseDouble(parts[9]), // targetHpAfter (CORRIGIDO para double)
-        AttackResult.valueOf(parts[5]), // result
-        unescape(parts[11]) // specialAction (NOVO)
-        );
+        unescape(parts[1]),
+        unescape(parts[2]),
+        Integer.parseInt(parts[3]),
+        Integer.parseInt(parts[4]),
+        Double.parseDouble(parts[6]),
+        Double.parseDouble(parts[7]),
+        Double.parseDouble(parts[8]),
+        Double.parseDouble(parts[9]),
+        AttackResult.valueOf(parts[5]),
+        unescape(parts[11]));
   }
 
   private String unescape(String value) {

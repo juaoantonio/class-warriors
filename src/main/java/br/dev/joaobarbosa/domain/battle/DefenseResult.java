@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public class DefenseResult {
   private final double effectiveDamage;
-  private final String specialAction; // Ex: "BLOQUEOU", "ESQUIVOU"
+  private final String specialAction;
 
   public DefenseResult(double effectiveDamage, String specialAction) {
     this.effectiveDamage = effectiveDamage;
@@ -13,6 +13,6 @@ public class DefenseResult {
   }
 
   public DefenseResult(double effectiveDamage) {
-    this(effectiveDamage, ""); // Construtor para quando não há ação especial
+    this(effectiveDamage, "");
   }
 }

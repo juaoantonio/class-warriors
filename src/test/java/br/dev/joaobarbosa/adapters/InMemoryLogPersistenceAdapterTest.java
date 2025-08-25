@@ -41,8 +41,8 @@ class InMemoryLogPersistenceAdapterTest {
     adapter.appendOne(entry);
 
     BattleLog loaded = adapter.load();
-    assertEquals(1, loaded.getEntries().size());
-    assertEquals("A", loaded.getEntries().getFirst().getAttackerName());
+    assertEquals(1, loaded.entries().size());
+    assertEquals("A", loaded.entries().getFirst().getAttackerName());
   }
 
   @Test
@@ -53,8 +53,8 @@ class InMemoryLogPersistenceAdapterTest {
     adapter.append(new BattleLog(List.of(e1, e2)));
 
     BattleLog loaded = adapter.load();
-    assertEquals(2, loaded.getEntries().size());
-    assertEquals("C", loaded.getEntries().get(1).getAttackerName());
+    assertEquals(2, loaded.entries().size());
+    assertEquals("C", loaded.entries().get(1).getAttackerName());
   }
 
   @Test
@@ -66,8 +66,8 @@ class InMemoryLogPersistenceAdapterTest {
     adapter.save(new BattleLog(List.of(newEntry)));
 
     BattleLog loaded = adapter.load();
-    assertEquals(1, loaded.getEntries().size());
-    assertEquals("New", loaded.getEntries().getFirst().getAttackerName());
+    assertEquals(1, loaded.entries().size());
+    assertEquals("New", loaded.entries().getFirst().getAttackerName());
   }
 
   @Test
@@ -78,7 +78,7 @@ class InMemoryLogPersistenceAdapterTest {
     BattleLog loaded1 = adapter.load();
     BattleLog loaded2 = adapter.load();
 
-    assertNotSame(loaded1.getEntries(), loaded2.getEntries()); // defensive copy
+    assertNotSame(loaded1.entries(), loaded2.entries()); // defensive copy
   }
 
   @Test
@@ -89,7 +89,7 @@ class InMemoryLogPersistenceAdapterTest {
     adapter.appendOne(e1);
     adapter.appendOne(e2);
 
-    List<BattleLogEntry> list = adapter.load().getEntries();
+    List<BattleLogEntry> list = adapter.load().entries();
     assertEquals("A", list.get(0).getAttackerName());
     assertEquals("C", list.get(1).getAttackerName());
   }
