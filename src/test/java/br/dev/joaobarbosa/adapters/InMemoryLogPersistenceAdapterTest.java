@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import br.dev.joaobarbosa.domain.AttackResult;
 import br.dev.joaobarbosa.domain.logs.BattleLog;
 import br.dev.joaobarbosa.domain.logs.BattleLogEntry;
-import java.time.Instant;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,18 +18,20 @@ class InMemoryLogPersistenceAdapterTest {
     adapter = new InMemoryLogPersistenceAdapter();
   }
 
+  /** Método auxiliar corrigido para usar a nova assinatura de BattleLogEntry.of() */
   private BattleLogEntry createEntry(String attacker, String target) {
     return BattleLogEntry.of(
         attacker,
         target,
         1,
         1,
-        10,
-        8,
-        20,
-        12,
+        10.0, // CORRIGIDO: Agora é double
+        8.0, // CORRIGIDO: Agora é double
+        20.0, // CORRIGIDO: Agora é double
+        12.0, // CORRIGIDO: Agora é double
         AttackResult.HIT,
-        Instant.parse("2024-01-01T12:00:00Z"));
+        "" // NOVO: Adicionado specialAction (vazio para este teste)
+        );
   }
 
   @Test

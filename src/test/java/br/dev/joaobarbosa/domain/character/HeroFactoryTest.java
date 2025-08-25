@@ -2,6 +2,7 @@ package br.dev.joaobarbosa.domain.character;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import br.dev.joaobarbosa.domain.character.hero.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

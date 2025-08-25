@@ -7,7 +7,6 @@ import br.dev.joaobarbosa.domain.logs.BattleLog;
 import br.dev.joaobarbosa.domain.logs.BattleLogEntry;
 import java.io.IOException;
 import java.nio.file.*;
-import java.time.Instant;
 import java.util.List;
 import org.junit.jupiter.api.*;
 
@@ -27,18 +26,10 @@ class CsvLogPersistenceAdapterTest {
     Files.deleteIfExists(Paths.get(TEMP_FILE));
   }
 
+  /** Método auxiliar corrigido para criar um BattleLogEntry com os novos tipos de dados. */
   private BattleLogEntry createSampleEntry(String attacker, String target) {
     return BattleLogEntry.of(
-        attacker,
-        target,
-        1,
-        1,
-        10,
-        8,
-        20,
-        12,
-        AttackResult.HIT,
-        Instant.parse("2024-01-01T12:00:00Z"));
+        attacker, target, 1, 1, 10.0, 8.0, 20.0, 12.0, AttackResult.HIT, "SAMPLE_ACTION");
   }
 
   @Test
@@ -60,9 +51,10 @@ class CsvLogPersistenceAdapterTest {
     adapter.save(new BattleLog(List.of(entry1, entry2)));
 
     List<String> lines = Files.readAllLines(Paths.get(TEMP_FILE));
-    assertEquals(3, lines.size()); // header + 2 entries
+    assertEquals(3, lines.size());
     assertTrue(lines.get(1).contains("A"));
     assertTrue(lines.get(2).contains("C"));
+    assertTrue(lines.get(1).contains("SAMPLE_ACTION"));
   }
 
   @Test
@@ -71,11 +63,14 @@ class CsvLogPersistenceAdapterTest {
     adapter.appendOne(entry1);
     adapter.save(new BattleLog(List.of(entry1)));
 
-    CsvLogPersistenceAdapter reloaded = new CsvLogPersistenceAdapter(TEMP_FILE);
-    BattleLog loaded = reloaded.load();
+    CsvLogPersistenceAdapter reloadedAdapter = new CsvLogPersistenceAdapter(TEMP_FILE);
+    BattleLog loaded = reloadedAdapter.load();
 
     assertEquals(1, loaded.getEntries().size());
-    assertEquals("A", loaded.getEntries().getFirst().getAttackerName());
+    BattleLogEntry loadedEntry = loaded.getEntries().getFirst();
+    assertEquals("A", loadedEntry.getAttackerName());
+    assertEquals(10.0, loadedEntry.getRawDamage());
+    assertEquals("SAMPLE_ACTION", loadedEntry.getSpecialAction());
   }
 
   @Test

@@ -2,85 +2,80 @@ package br.dev.joaobarbosa.domain.character;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import br.dev.joaobarbosa.domain.battle.Attack;
+import br.dev.joaobarbosa.domain.battle.DefenseResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-// Classe de teste para a classe abstrata Entity, usando uma implementação "dummy".
 class EntityTest {
 
-  // Uma implementação concreta de Entity para ser usada nos testes.
-  private static class ConcreteEntity extends Entity {
-    private ConcreteEntity(
-        String name, int hitPoints, int attackPower, int defense, int dexterity, int speed) {
-      super(name, hitPoints, attackPower, defense, dexterity, speed);
-    }
+  private ConcreteEntity character;
 
-    // Não precisamos de uma lógica real aqui para os testes de receiveDamage.
-    @Override
-    public int performAttack(Entity target) {
-      return this.attackPower;
-    }
-  }
-
-  private Entity character;
-
-  // Cria uma instância da nossa entidade de teste antes de cada teste, para cada teste ser
-  // independente.
   @BeforeEach
   void setUp() {
-    character = new ConcreteEntity("Dummy", 100, 10, 20, 5, 5);
+    character = new ConcreteEntity("Dummy", 100.0, 10, 20, 5, 5);
   }
 
-  // Teste de dano normal
   @Test
   @DisplayName("Deve receber dano normal quando o ataque é maior que a defesa")
   void testReceiveDamage_NormalDamage() {
-    int rawDamage = 30; // Dano bruto maior que a defesa (20)
+    Attack attack = new Attack(null, 30.0, 0.0);
+    DefenseResult result = character.receiveDamage(attack);
+    character.setHitPoints(character.getHitPoints() - result.getEffectiveDamage());
 
-    character.receiveDamage(rawDamage);
-
-    // Dano esperado = 30 (dano) - 20 (defesa) = 10
-    // HP esperado = 100 (inicial) - 10 (dano causado) = 90
-    assertEquals(90, character.getHitPoints(), "HP deve ser reduzido pelo dano líquido");
+    assertEquals(10.0, result.getEffectiveDamage(), "O dano efetivo deve ser 10.");
+    assertEquals(90.0, character.getHitPoints(), "HP deve ser reduzido pelo dano líquido");
   }
 
-  // Teste de dano insuficiente
   @Test
   @DisplayName("Não deve receber dano quando a defesa é maior ou igual ao ataque")
   void testReceiveDamage_BlockedByDefense() {
-    int rawDamage = 15; // Dano bruto menor que a defesa (20)
+    Attack attack = new Attack(null, 15.0, 0.0);
 
-    character.receiveDamage(rawDamage);
+    DefenseResult result = character.receiveDamage(attack);
+    character.setHitPoints(character.getHitPoints() - result.getEffectiveDamage());
 
-    // Dano esperado = 15 (dano) - 20 (defesa) = -5, que se torna 0.
-    // HP esperado = 100 (inicial) - 0 = 100
+    assertEquals(0.0, result.getEffectiveDamage(), "O dano efetivo deve ser 0.");
     assertEquals(
-        100, character.getHitPoints(), "HP não deve mudar se o dano for totalmente defendido");
+        100.0, character.getHitPoints(), "HP não deve mudar se o dano for totalmente defendido");
   }
 
-  // Teste de dano fatal
   @Test
   @DisplayName("HP deve ser 0 após receber dano fatal")
   void testReceiveDamage_Overkill() {
-    int rawDamage = 150; // Dano bruto muito alto
+    Attack attack = new Attack(null, 150.0, 0.0);
 
-    character.receiveDamage(rawDamage);
+    DefenseResult result = character.receiveDamage(attack);
+    character.setHitPoints(character.getHitPoints() - result.getEffectiveDamage());
 
-    // Dano esperado = 150 - 20 = 130
-    // HP esperado = 100 - 130 = -30, que se torna 0.
-    assertEquals(0, character.getHitPoints(), "HP deve ser 0 após receber dano fatal");
+    assertEquals(130.0, result.getEffectiveDamage(), "O dano efetivo deve ser 130.");
+
+    assertEquals(0.0, character.getHitPoints(), "HP deve ser 0 após receber dano fatal");
     assertFalse(character.isAlive(), "Personagem não deve estar vivo após dano fatal");
   }
 
-  // Teste de morte após um turno
   @Test
   @DisplayName("Deve retornar true quando HP > 0 e false quando HP = 0")
   void testIsAlive() {
     assertTrue(character.isAlive(), "Deve estar vivo no início");
 
-    character.receiveDamage(120); // Dano suficiente para zerar o HP
+    Attack fatalAttack = new Attack(null, 120.0, 0.0);
+    DefenseResult result = character.receiveDamage(fatalAttack);
+    character.setHitPoints(character.getHitPoints() - result.getEffectiveDamage());
 
     assertFalse(character.isAlive(), "Não deve estar vivo após ter o HP zerado");
+  }
+
+  private static class ConcreteEntity extends Entity {
+    private ConcreteEntity(
+        String name, double hitPoints, int attackPower, int defense, int dexterity, int speed) {
+      super(name, hitPoints, attackPower, defense, dexterity, speed);
+    }
+
+    @Override
+    public Attack performAttack(Entity target) {
+      return new Attack(this, this.attackPower, 0.0);
+    }
   }
 }
